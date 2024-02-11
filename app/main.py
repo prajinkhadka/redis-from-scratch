@@ -22,8 +22,8 @@ def parse_arguements():
     parser = argparse.ArgumentParser(
             description = "Arguement Parser for redis implementation"
             )
-    parser.add_arguement("--directory", type=str, help="Directory to store RDB files")
-    parser.add_arguement("--dbfilename", type=str, help="The name of RDB file")
+    parser.add_argument("--directory", type=str, help="Directory to store RDB files")
+    parser.add_argument("--dbfilename", type=str, help="The name of RDB file")
     return parser.parse_args()
 
 async def handle_client(reader, writer): 
