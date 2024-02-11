@@ -26,7 +26,7 @@ async def handle_client(reader, writer):
         print("The request for get set is", request)
 
         if request[2].lower() == "set":
-            key, value = request[4], value = request[6] 
+            key, value = request[4], request[6] 
             database[key] = value
             resp = "OK"
             response_value = encode_response(resp)
