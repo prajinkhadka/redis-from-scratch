@@ -22,7 +22,7 @@ async def handle_client(reader, writer):
             writer.write(PING_RESPONSE.encode())
             await writer.drain() 
 
-        writer.close()
+        # writer.close()
 
 
 async def main():
