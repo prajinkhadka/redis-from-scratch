@@ -4,6 +4,8 @@ import asyncio
 SERVER_IP = "localhost"
 SERVER_PORT = 6379
 PING_RESPONSE = "+PONG\r\n"
+database = {}
+
 
 async def handle_client(reader, writer):
     # need to write on the client 
@@ -17,7 +19,7 @@ async def handle_client(reader, writer):
             break 
         message = data.decode() 
         request = message.split("\r\n")
-        print("The request for echo is", request)
+        print("The request for get set is", request)
 
         if request[2] == "echo":
             response_value  =  "+" + request[4] + "\r\n"
