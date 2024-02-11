@@ -49,22 +49,31 @@ def read_rdb_data(config):
         val = f.read(length).decode()
         return val
 
-def get_value_from_rdb(config):
+def seek_till_key_value_pairs(file):
+    while op := file.read(1):
+        if op == b"\xfb":
+            break
+    file.read(2)
+
+def read_string(file):
+    length = get_string_len(file)
+    return file.read(length).decode()
+
+def read_unsigned_char(file):
+    return struct.unpack("B", file.read(1))[0]
+
+def read_key_value_pairs(config):
     rdb_file_loc = config.dir + "/" + config.dbfilename
     with open(rdb_file_loc, "rb") as f:
-        while operand := f.read(1):
-            if operand == b"\xfb":
-                break 
-        f.read(3)
-
-        length = struct.unpack("B", f.read(1))[0]
-        if length >> 6 == 0b00:
-            length = length & 0b00111111
-        else:
-            length = 0
-        val = f.read(length).decode()
-    return val
-
+        while True:
+            op = read_unsigned_char(file)
+            match op:
+                case 0xFF:
+                    break
+                case value_type:
+                    key = read_string(file)
+                    value = read_string(file)
+        return key, value
 
 async def handle_client(reader, writer): 
     ## parse arguements 
@@ -129,11 +138,10 @@ async def handle_client(reader, writer):
                 value = encode_response(exp_response)
                 writer.write(value.encode())
             else:
-                # result = read_rdb_data(config)
-                # print("the result is", result)
-                result = get_value_from_rdb(config)
-                print("the result is", result)
-                writer.write(f"${len(result)}\r\n{result}\r\n".encode())
+                k,v = read_key_value_pairs(config)
+                print("KC", k)
+                print("V is", v)
+                # writer.write(f"${len(result)}\r\n{result}\r\n".encode())
             
         if request[2].lower() == "echo":
             response_value = encode_response(request[4])
