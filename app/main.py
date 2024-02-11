@@ -57,7 +57,7 @@ async def handle_client(reader, writer):
 
             else:
                 value = value
-                
+            print("the value is", value) 
             value = encode_response(value)
             writer.write(value.encode())
             
