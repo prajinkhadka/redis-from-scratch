@@ -84,7 +84,6 @@ async def handle_client(reader, writer):
 
         if request[2].lower() == "keys":
             result = read_rdb_data(config)
-            print("the result is", result)
             writer.write(f"*1\r\n${len(result)}\r\n{result}\r\n".encode())
 
         if request[2].lower() == "config":
