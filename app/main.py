@@ -43,7 +43,7 @@ async def handle_client(reader, writer):
             value = database.get(request[4], "$-1\r\n") 
             print("the value getted is", value)
 
-            if isinstance(value, tuple):
+            if isinstance(value, tuple) and value[0] == "timer":
                 print("the value of 2 is", value[2])
                 time_difference = msg_time - value[2] 
                 time_difference_in_ms = time_difference.total_seconds() * 1000
@@ -55,7 +55,7 @@ async def handle_client(reader, writer):
                 else:
                     value = value[1]
 
-            elif:
+            else:
                 value = value
             print("the value is", value) 
             value = encode_response(value)
