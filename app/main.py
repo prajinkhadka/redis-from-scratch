@@ -50,6 +50,17 @@ def read_rdb_data(config):
         print(val)
         return val
 
+def get_value_from_rdb(config):
+    rdb_file_loc = config.dir + "/" + config.dbfilename
+    with open(rdb_file_loc, "rb") as f:
+        length = struct.unpack("B", f.read(1))[0]
+        if length >> 6 == 0b00:
+            length = length & 0b00111111
+        else:
+            length = 0
+        val = f.read(length).decode()
+    return val
+
 
 async def handle_client(reader, writer): 
     ## parse arguements 
@@ -99,20 +110,24 @@ async def handle_client(reader, writer):
             writer.write(response_value.encode()) 
 
         if request[2].lower() == "get":
-            value = database.get(request[4], "$-1\r\n")
-            exp_response = NULL
+            if request[4] in database:
+                value = database.get(request[4], "$-1\r\n")
+                exp_response = NULL
 
-            if isinstance(value, tuple) and value[0] == "timer":
-                time_difference = msg_time - value[2] 
-                time_difference_in_ms = time_difference.total_seconds() * 1000
-                if time_difference_in_ms >= float(value[3]):
-                    del database[request[4]]
+                if isinstance(value, tuple) and value[0] == "timer":
+                    time_difference = msg_time - value[2] 
+                    time_difference_in_ms = time_difference.total_seconds() * 1000
+                    if time_difference_in_ms >= float(value[3]):
+                        del database[request[4]]
+                    else:
+                        exp_response = value[1]
                 else:
-                    exp_response = value[1]
+                    exp_response = value
+                value = encode_response(exp_response)
+                writer.write(value.encode())
             else:
-                exp_response = value
-            value = encode_response(exp_response)
-            writer.write(value.encode())
+                result = get_value_from_rdb(config)
+                print("the result is", result)
             
         if request[2].lower() == "echo":
             response_value = encode_response(request[4])
