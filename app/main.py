@@ -54,6 +54,9 @@ async def handle_client(reader, writer):
         request = message.split("\r\n")
         print("The request for get set is", request) 
 
+        if request[2].lower() == "keys":
+            read_rdb_data(config)
+
         if request[2].lower() == "config":
             key = request[6].lower()
             if key == "dir":
