@@ -54,7 +54,7 @@ async def handle_client(reader, writer):
             else:
                 value = config.dbfilename
 
-            return f"*2\r\n${len(key)}\r\n{key}\r\n${len(value)}\r\n{value}\r\n".encode()
+            writer.write(f"*2\r\n${len(key)}\r\n{key}\r\n${len(value)}\r\n{value}\r\n".encode())
 
             
 
