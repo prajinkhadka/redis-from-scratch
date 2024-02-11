@@ -41,7 +41,7 @@ async def handle_client(reader, writer):
 
         if request[2].lower() == "get":
             value = database.get(request[4], "$-1\r\n")
-            exp_response = "$-1\r\n"
+            exp_response = NULL
             print("the value getted is", value)
 
             if isinstance(value, tuple) and value[0] == "timer":
@@ -55,7 +55,6 @@ async def handle_client(reader, writer):
                     del database[request[4]]
                 else:
                     exp_response = value[1]
-
             else:
                 exp_response = value
             print("the value is", exp_response) 
