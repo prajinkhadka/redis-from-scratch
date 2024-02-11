@@ -31,7 +31,8 @@ def read_rdb_data(config):
     rdb_file_loc = config.dir + "/" + config.dbfilename
     with open(rdb_file_loc, "rb") as f:
         data = f.read()
-        print("The data in RDB file is", data)
+
+    with open(rdb_file_loc, "rb") as f:
         while operand := f.read(1):
             print(operand)
             if operand == b"\xfb":
@@ -71,7 +72,9 @@ async def handle_client(reader, writer):
         print("The request for get set is", request) 
 
         if request[2].lower() == "keys":
-            read_rdb_data(config)
+            result = read_rdb_data(config)
+            print("the result is", result)
+            writer.write(f"*1\r\n${len(result)}\r\n{result}\r\n".encode())
 
         if request[2].lower() == "config":
             key = request[6].lower()
