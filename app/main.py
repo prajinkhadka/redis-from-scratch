@@ -54,8 +54,9 @@ async def handle_client(reader, writer):
                     value = value[1]
 
             else:
-                value = encode_response(value[0])
-
+                value = value
+                
+            value = encode_response(value)
             await writer.write(value.encode())
             
         if request[2].lower() == "echo":
