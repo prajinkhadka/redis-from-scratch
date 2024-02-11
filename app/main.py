@@ -20,7 +20,8 @@ async def handle_client(reader, writer):
         print("The request for echo is", request)
 
         if request[2] == "echo":
-            response_value  = request[4] 
+            response_value  = request[4]
+            print("The response_value is", response_value)
             await writer.write(response_value.encode())
 
         if "ping" in request:
