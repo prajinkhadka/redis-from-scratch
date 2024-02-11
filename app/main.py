@@ -29,7 +29,8 @@ async def handle_client(reader, writer):
             key = request[4] 
             value = request[6] 
             database[key] = value
-            response_value = "+" + "OK" + "\r\n"
+            resp = "OK"
+            response_value = encode_response(resp)
             writer.write(response_value.encode()) 
 
         if request[2].lower() == "get":
