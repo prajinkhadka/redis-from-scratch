@@ -43,6 +43,7 @@ async def handle_client(reader, writer):
             value = database.get(request[4], "$-1\r\n")
 
             if len(value) > 1:
+                print("the value of 2 is", value[2])
                 time_difference = msg_time - value[2] 
                 time_difference_in_ms = time_difference.total_seconds() * 1000
 
