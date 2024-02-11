@@ -6,7 +6,6 @@ SERVER_PORT = 6379
 PING_RESPONSE = "+PONG\r\n"
 database = {}
 
-
 async def handle_client(reader, writer):
     # need to write on the client 
     client_address = writer.get_extra_info("peername") 
@@ -20,6 +19,13 @@ async def handle_client(reader, writer):
         message = data.decode() 
         request = message.split("\r\n")
         print("The request for get set is", request)
+
+        if request[2] == "set":
+            key = request[4] 
+            value = request[6] 
+            database[key] = value
+            response_value = "+" + "OK" + "\r\n"
+            await writer.write(response_value.encode())
 
         if request[2] == "echo":
             response_value  =  "+" + request[4] + "\r\n"
