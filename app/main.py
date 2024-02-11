@@ -29,7 +29,7 @@ async def handle_client(reader, writer):
             key, value = request[4], request[6]
             if "px" in request:
                 timer = request[10]
-                database[key] = ["timer", value, datetime.datetime.now(), timer)
+                database[key] = ("timer", value, datetime.datetime.now(), timer)
             else:
                 database[key] = value
             resp = "OK"
