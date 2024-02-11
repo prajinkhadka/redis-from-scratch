@@ -30,6 +30,8 @@ def parse_arguements():
 def read_rdb_data(config):
     rdb_file_loc = config.dir + "/" + config.dbfilename
     with open(rdb_file_loc, "rb") as f:
+        data = f.read()
+        print("The data in RDB file is", data)
         while operand := f.read(1):
             print(operand)
             if operand == b"\xfb":
