@@ -23,8 +23,10 @@ def handle_connection(server_socket):
         print("The data recieved is", data)
 
         # the data recieved for ping will be something like this : *1\r\n$4\r\nping\r\n 
+        print("The raw data is", data)
         request = data.split("\r\n")
         print("The request recieved is", request)
+
         if 'ping' in request:
             client_connection.sendall(PING_RESPONSE.encode())
 
