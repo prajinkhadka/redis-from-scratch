@@ -50,7 +50,7 @@ async def handle_client(reader, writer):
                 print("the time_difference_in_ms is", time_difference_in_ms)
 
                 print("the value of 3 is", value[3])
-                if time_difference_in_ms >= value[3]:
+                if time_difference_in_ms >= float(value[3]):
                     del database[request[4]]
                 else:
                     value = value[1]
