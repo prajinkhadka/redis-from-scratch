@@ -26,8 +26,7 @@ async def handle_client(reader, writer):
         print("The request for get set is", request)
 
         if request[2].lower() == "set":
-            key = request[4] 
-            value = request[6] 
+            key, value = request[4], value = request[6] 
             database[key] = value
             resp = "OK"
             response_value = encode_response(resp)
@@ -36,13 +35,10 @@ async def handle_client(reader, writer):
         if request[2].lower() == "get":
             value = database.get(request[4], "$-1\r\n")
             value = encode_response(value)
-            print("the value is", value)
-
             await writer.write(value.encode())
             
         if request[2].lower() == "echo":
-            response_value  =  "+" + request[4] + "\r\n"
-            print("The response_value is", response_value)
+            response_value = encode_response(request[4])
             await writer.write(response_value.encode())
 
         if "ping" in request:
