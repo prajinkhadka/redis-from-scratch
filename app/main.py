@@ -17,7 +17,8 @@ async def handle_client(reader, writer):
             break 
         message = data.decode() 
         request = message.split("\r\n")
-        print("The request is", request)
+        print("The request for echo is", request)
+
         if "ping" in request:
             writer.write(PING_RESPONSE.encode())
             await writer.drain() 
