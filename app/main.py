@@ -1,35 +1,34 @@
 # Uncomment this to pass the first stage
-# import socket
-import socket
+import asyncio 
 
 SERVER_IP = "localhost"
 SERVER_PORT = 6379
 PING_RESPONSE = "+PONG\r\n"
 
-def main():
-    # You can use print statements as follows for debugging, they'll be visible when running tests.
-    print("Logs from your program will appear here!")
+async def handle_client(reader, writer):
+    # need to write on the client 
+    client_address = writer.get_extra_info("peername") 
+    print(f"Connected to the client with IP {client_address}")
+    # we might recivie multiple request from the same client so to handle that run a loopj
+    while True:
+        # read the data from client
+        data = await reader.read(1024)
+        if not data:
+            break 
+        message = data.decode() 
+        request = message.split("\r\n")
+        if "ping" in request:
+            writer.write(PING_RESPONSE.encode())
+            await writer.drain() 
 
-    server_socket = socket.create_server((SERVER_IP, SERVER_PORT), reuse_port = True)
-    handle_connection(server_socket)
+        writer.close()
 
-def handle_connection(server_socket):
-    # Returns the clinet connection object and the client address. 
 
-    client_connection, client_address = server_socket.accept()
-    with client_connection:
-        while True:
-            print(f"Now connected to {client_address}") 
-            data = client_connection.recv(1024).decode() 
-            print("The data recieved is", data)
-
-            print("The raw data is", data)
-            # the data recieved for ping will be something like this : *1\r\n$4\r\nping\r\n 
-            request = data.split("\r\n")
-            print("The request recieved is", request)
-
-            if 'ping' in request:
-                client_connection.sendall(PING_RESPONSE.encode())
+async def main():
+    # Using asyncio to handle non blocking call
+    server = await asyncio.start_sever(handle_client, SERVER_IP, SERVER_PORT)
+    async with server:
+        server.serve_forever()
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
