@@ -30,7 +30,7 @@ async def handle_client(reader, writer):
 
         if request[2].lower() == "get":
             value = database.get(request[2], "$-1\r\n")
-            writer.write(value.encode())
+            await writer.write(value.encode())
             
         if request[2].lower() == "echo":
             response_value  =  "+" + request[4] + "\r\n"
