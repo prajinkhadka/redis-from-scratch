@@ -64,7 +64,7 @@ def read_unsigned_char(file):
 
 def read_key_value_pairs(config):
     rdb_file_loc = config.dir + "/" + config.dbfilename
-    with open(rdb_file_loc, "rb") as f:
+    with open(rdb_file_loc, "rb") as file:
         while True:
             op = read_unsigned_char(file)
             match op:
