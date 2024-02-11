@@ -4,6 +4,8 @@ import socket
 
 SERVER_IP = "localhost"
 SERVER_PORT = 6379
+PING_RESPONSE = "+PONG\r\n"
+
 def main():
     # You can use print statements as follows for debugging, they'll be visible when running tests.
     print("Logs from your program will appear here!")
@@ -19,6 +21,10 @@ def handle_connection(server_socket):
         print(f"Now connected to {client_address}")
         data = client_connection.recv(1024).decode() 
         print("The data recieved is", data)
+
+        # the data recieved for ping will be something like this : *1\r\n$4\r\nping\r\n 
+        request = data.split("\r\n")
+        print(request)
 
 
 
