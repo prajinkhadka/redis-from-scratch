@@ -40,7 +40,8 @@ async def handle_client(reader, writer):
             writer.write(response_value.encode()) 
 
         if request[2].lower() == "get":
-            value = database.get(request[4], "$-1\r\n") 
+            value = database.get(request[4], "$-1\r\n")
+            exp_response = "$-1\r\n"
             print("the value getted is", value)
 
             if isinstance(value, tuple) and value[0] == "timer":
@@ -53,12 +54,12 @@ async def handle_client(reader, writer):
                 if time_difference_in_ms >= float(value[3]):
                     del database[request[4]]
                 else:
-                    value = value[1]
+                    exp_response = value[1]
 
             else:
-                value = value
-            print("the value is", value) 
-            value = encode_response(value)
+                exp_response = value
+            print("the value is", exp_response) 
+            value = encode_response(exp_response)
             writer.write(value.encode())
             
         if request[2].lower() == "echo":
