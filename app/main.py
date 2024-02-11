@@ -33,7 +33,7 @@ async def handle_client(reader, writer):
             writer.write(response_value.encode()) 
 
         if request[2].lower() == "get":
-            value = database.get(request[2], "$-1\r\n")
+            value = database.get(request[4], "$-1\r\n")
             value = encode_response(value)
             print("the value is", value)
 
