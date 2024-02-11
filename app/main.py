@@ -47,7 +47,9 @@ async def handle_client(reader, writer):
                 print("the value of 2 is", value[2])
                 time_difference = msg_time - value[2] 
                 time_difference_in_ms = time_difference.total_seconds() * 1000
+                print("the time_difference_in_ms is", time_difference_in_ms)
 
+                print("the value of 3 is", value[3])
                 if time_difference_in_ms >= value[3]:
                     del database[request[4]]
                 else:
