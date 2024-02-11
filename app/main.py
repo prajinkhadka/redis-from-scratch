@@ -6,8 +6,7 @@ SERVER_PORT = 6379
 PING_RESPONSE = "+PONG\r\n"
 NULL = "$-1\r\n"
 database = {}
-## database : {key :[timer, value]}
-
+## database : {key :[value,"timer", "value", "datetime.now", "timer_value"] ]}
 
 def encode_response(resp):
     return "+" + resp + "\r\n" 
@@ -27,8 +26,12 @@ async def handle_client(reader, writer):
         print("The request for get set is", request)
 
         if request[2].lower() == "set":
-            key, value = request[4], request[6] 
-            database[key] = value
+            key, value = request[4], request[6]
+            if "px" in request:
+                timer = request[10]
+                database[key] = ["timer", value, datetime.datetime.now(), timer)
+            else:
+                database[key] = value
             resp = "OK"
             response_value = encode_response(resp)
             writer.write(response_value.encode()) 
