@@ -52,6 +52,11 @@ def read_rdb_data(config):
 def get_value_from_rdb(config):
     rdb_file_loc = config.dir + "/" + config.dbfilename
     with open(rdb_file_loc, "rb") as f:
+        while operand := f.read(1):
+            if operand == b"\xfb":
+                break 
+        f.read(3)
+
         length = struct.unpack("B", f.read(1))[0]
         if length >> 6 == 0b00:
             length = length & 0b00111111
@@ -126,7 +131,6 @@ async def handle_client(reader, writer):
             else:
                 result = read_rdb_data(config)
                 print("the result is", result)
-
                 result = get_value_from_rdb(config)
                 print("the result is", result)
                 writer.write(f"${len(result)}\r\n{result}\r\n".encode())
