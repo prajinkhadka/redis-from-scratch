@@ -128,6 +128,7 @@ async def handle_client(reader, writer):
             else:
                 result = get_value_from_rdb(config)
                 print("the result is", result)
+                writer.write(f"${len(result)}\r\n{result}\r\n".encode())
             
         if request[2].lower() == "echo":
             response_value = encode_response(request[4])
