@@ -1,6 +1,10 @@
 # Uncomment this to pass the first stage
 import asyncio 
 import datetime
+import argparse 
+
+from app.config import RedisConfig 
+
 
 SERVER_IP = "localhost"
 SERVER_PORT = 6379
@@ -14,7 +18,20 @@ def encode_response(resp):
         return NULL
     return "+" + resp + "\r\n" 
 
-async def handle_client(reader, writer):
+def parse_arguements():
+    parser = argparse.ArgumentParser(
+            description = "Arguement Parser for redis implementation"
+            )
+    parser.add_arguement("--directory", type=str, help="Directory to store RDB files")
+    parser.add_arguement("--dbfilename", type=str, help="The name of RDB file")
+    return parser.parse_args()
+
+async def handle_client(reader, writer): 
+    ## parse arguements 
+    args = parse_arguements()
+    config = RedisConfig(directory = args.directory, dbfilename = args.dbfilename)
+    print("The config is", config)
+
     # need to write on the client 
     client_address = writer.get_extra_info("peername") 
     print(f"Connected to the client with IP {client_address}")
