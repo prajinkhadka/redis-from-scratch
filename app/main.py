@@ -20,6 +20,8 @@ async def handle_client(reader, writer):
     while True:
         # read the data from client
         data = await reader.read(1024)
+        msg_time = datetime.datetime.now()
+
         if not data:
             break 
         message = data.decode() 
@@ -32,14 +34,26 @@ async def handle_client(reader, writer):
                 timer = request[10]
                 database[key] = ("timer", value, datetime.datetime.now(), timer)
             else:
-                database[key] = value
+                database[key] = (value)
             resp = "OK"
             response_value = encode_response(resp)
             writer.write(response_value.encode()) 
 
         if request[2].lower() == "get":
             value = database.get(request[4], "$-1\r\n")
-            value = encode_response(value)
+
+            if len(value) > 1:
+                time_difference = msg_time - value[2] 
+                time_difference_in_ms = time_difference.total_seconds() * 1000
+
+                if time_difference_in_ms >= value[3]:
+                    del database[request[4]) 
+                else:
+                    value = value[1]
+
+            if len(value) == 1: 
+                value = encode_response(value[0])
+
             await writer.write(value.encode())
             
         if request[2].lower() == "echo":
