@@ -18,7 +18,6 @@ async def handle_client(reader, writer):
         if not data:
             break 
         message = data.decode() 
-        print("The messge for get set is", message)
         request = message.split("\r\n")
         print("The request for get set is", request)
 
@@ -27,10 +26,13 @@ async def handle_client(reader, writer):
             value = request[6] 
             database[key] = value
             response_value = "+" + "OK" + "\r\n"
-            print("the response_value value is", response_value)
             writer.write(response_value.encode()) 
+
+        if request[2].lower() == "get":
+            value = database.get(request[2], "$-1\r\n")
+            writer.write(value.encode())
             
-        if request[2] == "echo":
+        if request[2].lower() == "echo":
             response_value  =  "+" + request[4] + "\r\n"
             print("The response_value is", response_value)
             await writer.write(response_value.encode())
