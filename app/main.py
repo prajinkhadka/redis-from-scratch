@@ -40,7 +40,8 @@ async def handle_client(reader, writer):
             writer.write(response_value.encode()) 
 
         if request[2].lower() == "get":
-            value = database.get(request[4], "$-1\r\n")
+            value = database.get(request[4], "$-1\r\n") 
+            print("the value getted is", value)
 
             if len(value) > 1:
                 print("the value of 2 is", value[2])
