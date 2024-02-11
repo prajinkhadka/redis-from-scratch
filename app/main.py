@@ -62,6 +62,14 @@ def read_string(file):
 def read_unsigned_char(file):
     return struct.unpack("B", file.read(1))[0]
 
+def get_string_len(file):
+    first_byte = read_unsigned_char(file)
+    match first_byte:
+        case x if x >> 6 == 0b00:
+            return first_byte & 0b00111111
+        case _:
+            print("Invalid first byte", first_byte)
+
 def read_key_value_pairs(config):
     rdb_file_loc = config.dir + "/" + config.dbfilename
     with open(rdb_file_loc, "rb") as file:
