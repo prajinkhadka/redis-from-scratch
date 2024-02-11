@@ -10,7 +10,7 @@ database = {}
 ## database : {key :[value,"timer", "value", "datetime.now", "timer_value"] ]}
 
 def encode_response(resp):
-    if st_val == NULL:
+    if resp == NULL:
         return NULL
     return "+" + resp + "\r\n" 
 
