@@ -27,14 +27,14 @@ async def handle_client(reader, writer):
         print("The request for get set is", request)
 
         if request[2].lower() == "set":
-            key, value, timer = request[4], request[6], request[10] 
-            database[key] = [timer, value]
+            key, value, timer = request[4], request[6] 
+            database[key] = value
             resp = "OK"
             response_value = encode_response(resp)
             writer.write(response_value.encode()) 
 
         if request[2].lower() == "get":
-            value = database.get(request[4][1], "$-1\r\n")
+            value = database.get(request[4], "$-1\r\n")
             value = encode_response(value)
             await writer.write(value.encode())
             
