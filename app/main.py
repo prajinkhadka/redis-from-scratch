@@ -17,6 +17,7 @@ async def handle_client(reader, writer):
         if not data:
             break 
         message = data.decode() 
+        print("The messge for get set is", message)
         request = message.split("\r\n")
         print("The request for get set is", request)
 
