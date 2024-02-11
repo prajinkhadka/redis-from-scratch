@@ -7,6 +7,10 @@ PING_RESPONSE = "+PONG\r\n"
 NULL = "$-1\r\n"
 database = {}
 
+
+def encode_response(resp):
+    return "+" + resp + "\r\n" 
+
 async def handle_client(reader, writer):
     # need to write on the client 
     client_address = writer.get_extra_info("peername") 
@@ -29,8 +33,8 @@ async def handle_client(reader, writer):
             writer.write(response_value.encode()) 
 
         if request[2].lower() == "get":
-            print("the dtabase is", database)
-            value = database.get(request[2] + "\r\n", "$-1\r\n")
+            value = database.get(request[2], "$-1\r\n")
+            value = encode_response(value)
             print("the value is", value)
 
             await writer.write(value.encode())
