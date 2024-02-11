@@ -31,6 +31,7 @@ def read_rdb_data(config):
     rdb_file_loc = config.dir + "/" + config.dbfilename
     with open(rdb_file_loc, "rb") as f:
         data = f.read()
+        print("The data is", data)
 
     with open(rdb_file_loc, "rb") as f:
         while operand := f.read(1):
