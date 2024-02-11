@@ -4,6 +4,7 @@ import asyncio
 SERVER_IP = "localhost"
 SERVER_PORT = 6379
 PING_RESPONSE = "+PONG\r\n"
+NULL = "$-1\r\n"
 database = {}
 
 async def handle_client(reader, writer):
@@ -30,6 +31,8 @@ async def handle_client(reader, writer):
             await writer.write(response_value.encode()) 
             
         if request[2].lower() == "get":
+            value_for_key = database.get(request[4], NULL)
+            await writer.write(value_for_key.encode()) 
             print("get method")
 
         if request[2] == "echo":
