@@ -29,6 +29,7 @@ async def handle_client(reader, writer):
             writer.write(response_value.encode()) 
 
         if request[2].lower() == "get":
+            print("the dtabase is", database)
             value = database.get(request[2], "$-1\r\n")
             await writer.write(value.encode())
             
