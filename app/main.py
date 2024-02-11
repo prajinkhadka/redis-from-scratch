@@ -25,6 +25,7 @@ async def handle_client(reader, writer):
             value = request[6] 
             database[key] = value
             response_value = "+" + "OK" + "\r\n"
+            print("the response_value value is", response_value)
             await writer.write(response_value.encode())
 
         if request[2] == "echo":
