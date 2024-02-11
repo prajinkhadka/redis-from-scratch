@@ -26,6 +26,13 @@ def parse_arguements():
     parser.add_argument("--dbfilename", type=str, help="The name of RDB file")
     return parser.parse_args()
 
+def read_rdb_data(config):
+    rdb_file_loc = config.dir + "/" + config.dbfilename
+    with open(rdb_file_loc, "rb") as f:
+        data = f.read()
+        print("The data in RDB file is", data)
+
+
 async def handle_client(reader, writer): 
     ## parse arguements 
     args = parse_arguements()
@@ -45,7 +52,7 @@ async def handle_client(reader, writer):
             break 
         message = data.decode() 
         request = message.split("\r\n")
-        print("The request for get set is", request)
+        print("The request for get set is", request) 
 
         if request[2].lower() == "config":
             key = request[6].lower()
@@ -57,7 +64,6 @@ async def handle_client(reader, writer):
             writer.write(f"*2\r\n${len(key)}\r\n{key}\r\n${len(value)}\r\n{value}\r\n".encode())
 
             
-
         if request[2].lower() == "set":
             key, value = request[4], request[6]
             if "px" in request:
