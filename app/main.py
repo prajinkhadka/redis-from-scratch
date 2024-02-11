@@ -26,7 +26,7 @@ async def handle_client(reader, writer):
 
 async def main():
     # Using asyncio to handle non blocking call
-    server = await asyncio.start_sever(handle_client, SERVER_IP, SERVER_PORT)
+    server = await asyncio.start_server(handle_client, SERVER_IP, SERVER_PORT)
     async with server:
         server.serve_forever()
 
