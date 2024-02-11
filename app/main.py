@@ -44,22 +44,16 @@ async def handle_client(reader, writer):
         if request[2].lower() == "get":
             value = database.get(request[4], "$-1\r\n")
             exp_response = NULL
-            print("the value getted is", value)
 
             if isinstance(value, tuple) and value[0] == "timer":
-                print("the value of 2 is", value[2])
                 time_difference = msg_time - value[2] 
                 time_difference_in_ms = time_difference.total_seconds() * 1000
-                print("the time_difference_in_ms is", time_difference_in_ms)
-
-                print("the value of 3 is", value[3])
                 if time_difference_in_ms >= float(value[3]):
                     del database[request[4]]
                 else:
                     exp_response = value[1]
             else:
                 exp_response = value
-            print("the value is", exp_response) 
             value = encode_response(exp_response)
             writer.write(value.encode())
             
