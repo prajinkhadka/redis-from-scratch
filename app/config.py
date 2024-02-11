@@ -2,5 +2,5 @@ from dataclasses import dataclass
 
 @dataclass
 class RedisConfig:
-    directory: str 
+    dir: str 
     dbfilename: str

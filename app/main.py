@@ -22,14 +22,14 @@ def parse_arguements():
     parser = argparse.ArgumentParser(
             description = "Arguement Parser for redis implementation"
             )
-    parser.add_argument("--directory", type=str, help="Directory to store RDB files")
+    parser.add_argument("--dir", type=str, help="Directory to store RDB files")
     parser.add_argument("--dbfilename", type=str, help="The name of RDB file")
     return parser.parse_args()
 
 async def handle_client(reader, writer): 
     ## parse arguements 
     args = parse_arguements()
-    config = RedisConfig(directory = args.directory, dbfilename = args.dbfilename)
+    config = RedisConfig(dir = args.dir, dbfilename = args.dbfilename)
     print("The config is", config)
 
     # need to write on the client 
@@ -46,6 +46,16 @@ async def handle_client(reader, writer):
         message = data.decode() 
         request = message.split("\r\n")
         print("The request for get set is", request)
+
+        if request[2].lower() == "config":
+            if request[6].lower() == "dir":
+                value = config.dir 
+            else:
+                value = config.dbfilename
+
+            return f"*2\r\n${len(key)}\r\n{key}\r\n${len(value)}\r\n{value}\r\n".encode()
+
+            
 
         if request[2].lower() == "set":
             key, value = request[4], request[6]
