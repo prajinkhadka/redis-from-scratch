@@ -47,7 +47,6 @@ def read_rdb_data(config):
         else:
             length = 0
         val = f.read(length).decode()
-        print(val)
         return val
 
 def get_value_from_rdb(config):
@@ -126,6 +125,9 @@ async def handle_client(reader, writer):
                 value = encode_response(exp_response)
                 writer.write(value.encode())
             else:
+                result = read_rdb_data(config)
+                print("the result is", result)
+
                 result = get_value_from_rdb(config)
                 print("the result is", result)
                 writer.write(f"${len(result)}\r\n{result}\r\n".encode())
