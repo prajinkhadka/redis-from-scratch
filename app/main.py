@@ -28,13 +28,8 @@ async def handle_client(reader, writer):
             database[key] = value
             response_value = "+" + "OK" + "\r\n"
             print("the response_value value is", response_value)
-            await writer.write(response_value.encode()) 
+            writer.write(response_value.encode()) 
             
-        if request[2].lower() == "get":
-            value_for_key = database.get(request[4], NULL)
-            await writer.write(value_for_key.encode()) 
-            print("get method")
-
         if request[2] == "echo":
             response_value  =  "+" + request[4] + "\r\n"
             print("The response_value is", response_value)
