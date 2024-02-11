@@ -48,7 +48,8 @@ async def handle_client(reader, writer):
         print("The request for get set is", request)
 
         if request[2].lower() == "config":
-            if request[6].lower() == "dir":
+            key = request[6].lower()
+            if key == "dir":
                 value = config.dir 
             else:
                 value = config.dbfilename
